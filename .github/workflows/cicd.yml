@@ -32,7 +32,7 @@ jobs:
         # Use >> for every line after to APPEND without deleting
         echo "GEMINI_API_KEY='${{ secrets.GEMINI_API_KEY }}'" >> .env
         echo "CORS_DEV_ORIGIN='${{ secrets.CORS_DEV_ORIGIN }}'" >> .env
-        echo "PORT=5000" >> .env
+        
 
     - name: Build project
       run: npm run build --if-present
