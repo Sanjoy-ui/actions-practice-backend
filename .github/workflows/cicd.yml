@@ -1,31 +1,37 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
-name: Node.js CI
+name: Node.js CI/CD
 
 on:
   push:
     branches: [ "main" ]
-  
 
 jobs:
-  build:
-
-    runs-on: self-hosted
+  build-and-deploy:
+    
+    runs-on: self-hosted 
 
     strategy:
       matrix:
         node-version: [22.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: sudo pm2 restart backend
-   
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Deploy with PM2
+        run: |
+          # 1. Check if the app is already in the list
+          # 2. If yes, restart it to pick up new code
+          # 3. If no, start it fresh
+          pm2 restart backend || pm2 start index.js --name "backend"
+          
+          # 4. Save the list so it survives a server reboot
+          pm2 save
