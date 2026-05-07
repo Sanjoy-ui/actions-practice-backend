@@ -24,12 +24,15 @@ jobs:
     - name: Install dependencies
       run: npm install  
       
-    - name: Create .env file from GitHub Secrets
+    - name: Create .env file
       run: |
-        touch .env
-        echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" >> .env
-        echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" >> .env
-        echo "CORS_DEV_ORIGIN=${{ secrets.CORS_DEV_ORIGIN }}" >> .env
+        # Use > for the first line to create/clear the file
+        echo "MONGODB_URI='${{ secrets.MONGODB_URI }}'" > .env
+        
+        # Use >> for every line after to APPEND without deleting
+        echo "GEMINI_API_KEY='${{ secrets.GEMINI_API_KEY }}'" >> .env
+        echo "CORS_DEV_ORIGIN='${{ secrets.CORS_DEV_ORIGIN }}'" >> .env
+        echo "PORT=5000" >> .env
 
     - name: Build project
       run: npm run build --if-present
