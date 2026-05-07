@@ -26,12 +26,9 @@ jobs:
       
     - name: Create .env file
       run: |
-        # Use > for the first line to create/clear the file
-        echo "MONGODB_URI='${{ secrets.MONGODB_URI }}'" > .env
-        
-        # Use >> for every line after to APPEND without deleting
-        echo "GEMINI_API_KEY='${{ secrets.GEMINI_API_KEY }}'" >> .env
-        echo "CORS_DEV_ORIGIN='${{ secrets.CORS_DEV_ORIGIN }}'" >> .env
+          echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" > .env
+          echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" >> .env
+          echo "CORS_DEV_ORIGIN=${{ secrets.CORS_DEV_ORIGIN }}" >> .env
         
 
     - name: Build project
