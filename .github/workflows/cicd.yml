@@ -23,6 +23,13 @@ jobs:
 
     - name: Install dependencies
       run: npm install  
+    - name: Debug secrets
+      run: |
+        if [ -z "${{ secrets.MONGODB_URI }}" ]; then
+        echo "MONGODB_URI secret is EMPTY or NOT FOUND"
+        else
+        echo "MONGODB_URI secret is present (length: ${#MONGODB_URI})"
+        fi
       
     - name: Create .env file
       run: |
